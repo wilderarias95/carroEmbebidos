@@ -68,6 +68,26 @@ void ConfigTimePit(int time){
 	PIT->CHANNEL[0].TCTRL |= PIT_TCTRL_TIE_MASK | PIT_TCTRL_TEN_MASK;
 }
 
+void InitI2C(void){
+    bSIM_CG_I2C1 = 1;			// Disable I2C clock gating
+    bSIM_CG_PORTD = 1;			// Disable PORTD clock gating
+    bSIM_CG_PORTC = 1;			// Disable PORTC clock gating
+
+    bPTD7_MUX = kPTD7_MUX_I2C1_SCL;	// PTD7 as SCL signal for I2C1 module
+    bPTD6_MUX = kPTD6_MUX_I2C1_SDA; // PTD6 as SDA signal for I2C1 module
+    bPTD7_PS = 1;					// Pull up selected for PTD7
+    bPTD6_PS = 1;					// Pull up selected for PTD6
+    bPTD7_PE = 1;					// PTD7 pull enable required by I2C interface
+    bPTD6_PE = 1;					// PTD6 pull enable required by I2C interface
+    bPTD7_DSE = 1;					// PTD7 pull enable required by I2C interface
+    bPTD6_DSE = 1;					// PTD6 pull enable required by I2C interface
+
+    bPTC3_MUX = kPTC3_MUX_GPIO;		// MMA8451 Interrupt
+    bPTC2_MUX = kPTC2_MUX_GPIO;		// MMA8451 Interrupt
+    bPTC3_IRQC = kPORT_IRQC_INTERRUPT_RISING_EDGE;
+    bPTC2_IRQC = kPORT_IRQC_INTERRUPT_RISING_EDGE;
+}
+
 void SetDuty(int delay, int duty){
 	TPM1->CONTROLS[0].CnV = duty;
 	while(delay)
@@ -104,17 +124,17 @@ void Stop(void){// stop 1125
 }
 
 /**
- * min 10.72 cm/s , max 1126 cm/s
+ * min 5.361 cm/s , max 562.97 cm/s
  * */
 float GetForwardSpeed(float WheelR, float duty){
 	return 0.35744*WheelR*(1125-duty);
 }
 /**
- * min 44.44 cm/s, 603 cm/s
+ * min 20.74 cm/s, 281.48 cm/s
  * */
 
 float GetBackwardSpeed(float WheelR, float duty){
-	return 0.21164*WheelR*(duty-1125);
+	return 0.197534*WheelR*(duty-1125);
 }
 
 int GetForwardDuty(float WheelR, float speed){
