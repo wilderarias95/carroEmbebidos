@@ -44,6 +44,11 @@ void InitDriver(int MotorKV, float WheelR, float MaxFwSpeed, float MinFwSpeed, f
 	minFwSpeed = MinFwSpeed;
 	maxBwSpeed = MaxBwSpeed;
 	minBwSpeed = MinBwSpeed;
+
+	//SIM->SCGC5 |= SIM_SCGC5_PORTB_MASK;
+	//PORTB->PCR[18] |= PORT_PCR_MUX(3); //tpm2ch0
+
+
 }
 
 void InitPit(void){
@@ -52,7 +57,7 @@ void InitPit(void){
 	PIT->MCR = 0x00000000;
 
 	//Timer 2 FREQUENCY 48MHz 20.83 ns
-	PIT->CHANNEL[1].LDVAL = 6; //timer 2 genera interrupciones cada 8 del timer 1
+	PIT->CHANNEL[1].LDVAL = 8; //timer 2 genera interrupciones cada 8 del timer 1
 	PIT->CHANNEL[1].TCTRL |= PIT_TCTRL_CHN_MASK | PIT_TCTRL_TIE_MASK | PIT_TCTRL_TEN_MASK;
 	//Timer 1
 	PIT->CHANNEL[0].LDVAL |= 0x016E35FF; //timer 1 genera interrupción cada segundo

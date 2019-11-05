@@ -32,10 +32,10 @@ void delay(int number_of_seconds)
     int milli_seconds = 1000 * number_of_seconds;
 
     // Stroing start time
-    clock_t start_time = clock();
+    //clock_t start_time = clock();
 
     // looping till required time is not acheived
-    while (clock() < start_time + milli_seconds);
+    while (milli_seconds--);
 }
 
 int i2c1_do_start()
